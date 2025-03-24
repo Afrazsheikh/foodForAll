@@ -22,8 +22,6 @@
 </mat-menu>
 
 <!-- Flag image template -->
-
-<!-- Flag image template -->
 <ng-template
     let-lang
     #flagImage>
