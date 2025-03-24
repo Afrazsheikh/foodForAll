@@ -1,0 +1,489 @@
+<div
+    class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent"
+>
+    <!-- Header -->
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b"
+    >
+        <!-- Loader -->
+        <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        <!-- Title -->
+        <div class="text-4xl font-extrabold tracking-tight">Donations</div>
+        <!-- Actions -->
+        <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <!-- Search -->
+            <mat-form-field
+                class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64"
+            >
+                <mat-icon
+                    class="icon-size-5"
+                    matPrefix
+                    [svgIcon]="'heroicons_solid:search'"
+                ></mat-icon>
+                <input
+                    matInput
+                    [formControl]="searchInputControl"
+                    [autocomplete]="'off'"
+                    [placeholder]="'Search Order'"
+                />
+            </mat-form-field>
+
+            <button
+                class="ml-4"
+                mat-flat-button
+                [color]="'primary'"
+                (click)="openDonationDialog()"
+            >
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Donate!</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+        <!-- Products list -->
+        <div
+            class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto"
+        >
+            <ng-container *ngIf="orders$ | async as orders">
+                <ng-container *ngIf="orders.length > 0; else noOrder">
+                    <div class="grid">
+                        <!-- Header -->
+                        <div
+                            class="orders-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            matSort
+                            matSortDisableClear
+                        >
+                            <div
+                                [mat-sort-header]="'serial_number'"
+                                class="lg:flex items-center"
+                            >
+                                S. No.
+                            </div>
+
+                            <div
+                                class="hidden lg:flex items-center"
+                                [mat-sort-header]="'volunteerName'"
+                            >
+                                Volunteer
+                            </div>
+                            <div
+                                class="hidden lg:flex items-center"
+                                [mat-sort-header]="'donationDate'"
+                            >
+                                Scheduled Date
+                            </div>
+                            <div
+                                class="hidden lg:flex items-center"
+                                [mat-sort-header]="'donationTime'"
+                            >
+                                Scheduled Time
+                            </div>
+
+                            <div
+                                class="hidden lg:flex items-center"
+                                [mat-sort-header]="'active'"
+                            >
+                                Active
+                            </div>
+                            <div class="hidden lg:flex items-center">
+                                Status
+                            </div>
+                            <div class="hidden sm:flex items-center">
+                                Details
+                            </div>
+                        </div>
+                        <!-- Rows -->
+                        <ng-container *ngIf="orders$ | async as orders">
+                            <ng-container
+                                *ngFor="
+                                    let order of orders;
+                                    let i = index;
+                                    trackBy: trackByFn
+                                "
+                            >
+                                <div
+                                    class="orders-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b"
+                                >
+                                    <div class="">
+                                        {{ i + 1 }}
+                                    </div>
+                                    <!-- Pin Code -->
+
+                                    <ng-container *ngIf="order.volunteerName">
+                                        <div class="hidden lg:block truncate">
+                                            {{ order.volunteerName }}
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="!order.volunteerName">
+                                        <div class="hidden lg:block truncate">
+                                            -
+                                        </div>
+                                    </ng-container>
+                                    <div class="hidden lg:block truncate">
+                                        {{
+                                            order.donationDate
+                                                | date : format : timezone
+                                        }}
+                                    </div>
+                                    <div class="hidden lg:block truncate">
+                                        {{ order.donationTime }}
+                                    </div>
+
+                                    <!-- Active -->
+                                    <div class="hidden lg:block">
+                                        <!-- <ng-container *ngIf="order.active">
+                                            <mat-icon
+                                                class="text-green-400 icon-size-5"
+                                                [svgIcon]="
+                                                    'heroicons_solid:check'
+                                                "
+                                            ></mat-icon>
+                                        </ng-container>
+                                        <ng-container *ngIf="!order.active">
+                                            <mat-icon
+                                                class="text-gray-400 icon-size-5"
+                                                [svgIcon]="'heroicons_solid:x'"
+                                            ></mat-icon>
+                                        </ng-container> -->
+                                        <ng-container
+                                            *ngIf="
+                                                order.currentState ==
+                                                'Donation Provided'
+                                            "
+                                        >
+                                            <span
+                                                style="
+                                                    display: inline-block;
+                                                    padding: 6px 12px;
+
+                                                    background-color: #32cf386b;
+                                                    color: white;
+
+                                                    text-align: center;
+                                                    white-space: nowrap;
+                                                "
+                                            >
+                                                Order Placed
+                                            </span>
+                                        </ng-container>
+
+                                        <ng-container
+                                            *ngIf="
+                                                order.currentState ==
+                                                'Donation '
+                                            "
+                                        >
+                                            <span
+                                                style="
+                                                    display: inline-block;
+                                                    padding: 6px 12px;
+                                                    border-radius: 16px;
+                                                    background-color: #c92f2f;
+                                                    color: white;
+                                                    font-size: 14px;
+
+                                                    text-align: center;
+                                                    white-space: nowrap;
+                                                "
+                                            >
+                                                Cancelled
+                                            </span>
+                                        </ng-container>
+                                    </div>
+
+                                    <!-- Details button -->
+                                    <ng-container>
+                                        <button
+                                            mat-icon-button
+                                            (click)="locationDialog()"
+                                        >
+                                            <mat-icon>navigation</mat-icon>
+                                        </button>
+
+                                        <!-- <div class="max-w-240 max-h-screen">
+                                            <agm-map
+                                                [latitude]="28.5355"
+                                                [longitude]="77.391"
+                                                [zoom]="14"
+                                                style="height: 500px"
+                                            >
+                                                <agm-marker
+                                                    [latitude]="28.5355"
+                                                    [longitude]="77.391"
+                                                    [label]="
+                                                        'Noida (Reference)'
+                                                    "
+                                                ></agm-marker>
+                                                <agm-marker
+                                                    [latitude]="donorLat"
+                                                    [longitude]="donorLng"
+                                                    [label]="'Donor'"
+                                                ></agm-marker>
+                                                <agm-marker
+                                                    [latitude]="volunteerLat"
+                                                    [longitude]="volunteerLng"
+                                                    [label]="'Volunteer'"
+                                                ></agm-marker>
+                                            </agm-map>
+                                        </div> -->
+                                    </ng-container>
+                                    <!-- <div>
+                                        <button
+                                            class="min-w-10 min-h-7 h-7 px-2 leading-6"
+                                            mat-stroked-button
+                                            (click)="toggleDetails(order.id)"
+                                        >
+                                            <mat-icon
+                                                class="icon-size-5"
+                                                [svgIcon]="
+                                                    selectedOrder?.id ===
+                                                    order.id
+                                                        ? 'heroicons_solid:chevron-up'
+                                                        : 'heroicons_solid:chevron-down'
+                                                "
+                                            ></mat-icon>
+                                        </button>
+                                    </div> -->
+                                </div>
+                                <div class="grid">
+                                    <!-- <ng-container
+                                        *ngIf="selectedOrder?.id === order.id"
+                                    >
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                rowDetailsTemplate;
+                                                context: {
+                                                    $implicit: selectedOrder
+                                                }
+                                            "
+                                        ></ng-container>
+                                    </ng-container> -->
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+
+                    <mat-paginator
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [ngClass]="{ 'pointer-events-none': isLoading }"
+                        [length]="pagination.length"
+                        [pageIndex]="pagination.page"
+                        [pageSize]="pagination.size"
+                        [pageSizeOptions]="[5, 10, 25, 100]"
+                        [showFirstLastButtons]="true"
+                    ></mat-paginator>
+                </ng-container>
+            </ng-container>
+
+            <ng-template #rowDetailsTemplate let-order>
+                <div class="shadow-lg overflow-hidden">
+                    <div class="flex border-b">
+                        <!-- Selected product form -->
+                        <form
+                            class="flex flex-col w-full"
+                            [formGroup]="selectedOrderForm"
+                        >
+                            <div class="flex flex-col sm:flex-row p-8">
+                                <div class="flex flex-auto flex-wrap">
+                                    <!-- Name, SKU & etc. -->
+                                    <div
+                                        class="flex flex-col w-full lg:w-3/4 sm:pl-8"
+                                    >
+                                        <div formGroupName="donor">
+                                            <!-- Name -->
+                                            <mat-form-field class="w-2/3">
+                                                <mat-label>Name</mat-label>
+                                                <input
+                                                    matInput
+                                                    [formControlName]="'name'"
+                                                    [readonly]="true"
+                                                />
+                                            </mat-form-field>
+                                            <mat-form-field class="w-1/3 pl-2">
+                                                <mat-label>Contact</mat-label>
+                                                <input
+                                                    matInput
+                                                    [formControlName]="'phone'"
+                                                    [readonly]="true"
+                                                />
+                                            </mat-form-field>
+                                        </div>
+
+                                        <!-- SKU and Barcode -->
+
+                                        <div class="flex">
+                                            <mat-form-field
+                                                class="fuse-mat-textarea flex-auto w-2/3 pr-2"
+                                            >
+                                                <textarea
+                                                    matInput
+                                                    [placeholder]="
+                                                        'Pickup Address'
+                                                    "
+                                                    [rows]="3"
+                                                    [formControlName]="
+                                                        'pickupAddress'
+                                                    "
+                                                    [readonly]="true"
+                                                ></textarea>
+                                                <mat-icon
+                                                    class="icon-size-5"
+                                                    matPrefix
+                                                    [svgIcon]="
+                                                        'heroicons_solid:menu-alt-2'
+                                                    "
+                                                ></mat-icon>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="flex">
+                                            <mat-form-field
+                                                class="fuse-mat-textarea flex-auto w-2/3 pr-2"
+                                            >
+                                                <textarea
+                                                    matInput
+                                                    [placeholder]="
+                                                        'Drop Address'
+                                                    "
+                                                    [rows]="3"
+                                                    [formControlName]="
+                                                        'dropAddress'
+                                                    "
+                                                    [readonly]="true"
+                                                ></textarea>
+                                                <mat-icon
+                                                    class="icon-size-5"
+                                                    matPrefix
+                                                    [svgIcon]="
+                                                        'heroicons_solid:menu-alt-2'
+                                                    "
+                                                ></mat-icon>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="w-1/3 pl-2">
+                                                <mat-label>pincode</mat-label>
+                                                <input
+                                                    matInput
+                                                    [formControlName]="
+                                                        'pincode'
+                                                    "
+                                                    [readonly]="true"
+                                                />
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="flex">
+                                            <!-- <mat-form-field class="w-1/3 pr-2">
+                                                <mat-label>Volunteer</mat-label>
+                                                <mat-select [formControlName]="'volunteers'" >
+                                                    <ng-container *ngFor="let volunteer of volunteers">
+                                                        <mat-option [value]="volunteer.id">
+                                                            {{volunteers.name}}
+                                                        </mat-option>
+                                                    </ng-container>
+                                                </mat-select>
+                                            </mat-form-field> -->
+
+                                            <mat-form-field class="w-1/3 pl-2">
+                                                <mat-label
+                                                    >Donation Time</mat-label
+                                                >
+                                                <input
+                                                    matInput
+                                                    [formControlName]="
+                                                        'donationTime'
+                                                    "
+                                                    [readonly]="true"
+                                                />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex flex-col w-full lg:w-1/4 sm:pl-8"
+                                    >
+                                        <span class="font-semibold mb-2">
+                                            Status</span
+                                        >
+                                        <mat-slide-toggle
+                                            [formControlName]="'active'"
+                                            [color]="'primary'"
+                                        >
+                                            {{
+                                                selectedOrderForm.get("active")
+                                                    .value === true
+                                                    ? "Active"
+                                                    : "Disabled"
+                                            }}
+                                        </mat-slide-toggle>
+                                        <!-- </div> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="flex items-center justify-between w-full border-t px-8 py-4"
+                            >
+                                <!-- <button class="-ml-4" mat-button [color]="'warn'" (click)="deleteSelectedCanopy()">
+                                    Delete
+                                </button> -->
+                                <div class="flex items-center">
+                                    <div
+                                        class="flex items-center mr-4"
+                                        *ngIf="flashMessage"
+                                    >
+                                        <ng-container
+                                            *ngIf="flashMessage === 'success'"
+                                        >
+                                            <mat-icon
+                                                class="text-green-500"
+                                                [svgIcon]="
+                                                    'heroicons_outline:check'
+                                                "
+                                            ></mat-icon>
+                                            <span class="ml-2"
+                                                >Donation Data updated</span
+                                            >
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="flashMessage === 'error'"
+                                        >
+                                            <mat-icon
+                                                class="text-red-500"
+                                                [svgIcon]="
+                                                    'heroicons_outline:x'
+                                                "
+                                            ></mat-icon>
+                                            <span class="ml-2"
+                                                >An error occurred, try
+                                                again!</span
+                                            >
+                                        </ng-container>
+                                    </div>
+                                    <button
+                                        mat-flat-button
+                                        [color]="'primary'"
+                                        (click)="updateSelectedOrder()"
+                                    >
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #noOrder>
+                <div
+                    class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center"
+                >
+                    There are no Orders!
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

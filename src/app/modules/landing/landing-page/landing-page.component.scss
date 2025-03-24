@@ -1,0 +1,133 @@
+/* Container for Statistics */
+.statistics-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px;
+}
+
+/* Card Design */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Card Hover Effect */
+.card:hover {
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+/* Card Text Styles */
+.card h3 {
+    color: #4caf50;
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.card p {
+    color: #666;
+    font-size: 18px;
+    margin: 0;
+}
+/* Container for Statistics */
+.statistics-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px;
+}
+
+/* General Card Design */
+.card,
+.service-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Card Hover Effect */
+.card:hover,
+.service-card:hover {
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+/* Card Text Styles */
+.card h3,
+.service-card h3 {
+    color: #4caf50;
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.card p,
+.service-card p {
+    color: #666;
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Our Services Section */
+.services-section {
+    text-align: center;
+    padding: 50px 20px;
+    background: #f5f5f5;
+}
+
+.services-section h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Services Container */
+.services-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .statistics-container,
+    .services-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card,
+    .service-card {
+        width: 80%; /* Cards take up more space on small screens */
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card,
+    .service-card {
+        width: 90%; /* Adjust for very small screens */
+    }
+
+    .services-section h2 {
+        font-size: 24px;
+    }
+
+    .card h3,
+    .service-card h3 {
+        font-size: 22px;
+    }
+
+    .card p,
+    .service-card p {
+        font-size: 16px;
+    }
+}

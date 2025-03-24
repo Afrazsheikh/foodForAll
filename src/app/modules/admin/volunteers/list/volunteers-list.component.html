@@ -1,0 +1,268 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <!-- Loader -->
+        <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        <!-- Title -->
+        <div class="text-4xl font-extrabold tracking-tight">Volunteers</div>
+        <!-- Actions -->
+        <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
+                    [placeholder]="'Search Volunteer'">
+            </mat-form-field>
+            <!-- Add Volunteer button -->
+            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="createVolunteer()">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Add New</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+
+        <!-- Products list -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container *ngIf="(volunteers$ | async) as volunteers">
+                <ng-container *ngIf="volunteers.length > 0; else noVolunteer">
+                    <div class="grid">
+                        <!-- Header -->
+                        <div class="volunteers-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            matSort matSortDisableClear>
+                            <div [mat-sort-header]="'serial_number'" class="lg:flex items-center">
+                                S. No.
+                            </div>
+
+                            <div [mat-sort-header]="'name'" class="lg:flex items-center">
+                                Name
+                            </div>
+                            <div class="hidden lg:flex items-center" [mat-sort-header]="'contact'">
+                                Phone
+                            </div>
+                            <div class="hidden lg:flex items-center" [mat-sort-header]="'Address'">
+                                Address
+                            </div>
+                            <div class="hidden lg:flex items-center" [mat-sort-header]="'Email'">
+                                Email
+                            </div>
+
+                            <div class="hidden lg:flex items-center" [mat-sort-header]="'active'">
+                                Active
+                            </div>
+                            <div class="hidden sm:flex items-center">Details</div>
+                        </div>
+                        <!-- Rows -->
+                        <ng-container *ngIf="(volunteers$ | async) as volunteers">
+                            <ng-container *ngFor="let volunteer of volunteers; let i = index; trackBy: trackByFn">
+                                <div class="volunteers-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                    <div class="">
+                                        {{i+1}}
+                                    </div>
+                                    <!-- Pin Code -->
+                                    <div class=" lg:flex items-center">
+                                        <div class="">{{volunteer.name}}</div>
+                                    </div>
+                                    <!-- Name -->
+                                    <div class="hidden lg:block truncate">
+                                        {{volunteer.contact}}
+                                    </div>
+
+                                    <!-- Price -->
+                                    <div class="hidden lg:block truncate">
+                                        {{volunteer.address}}
+                                    </div>
+
+                                    <div class="hidden lg:block truncate">
+                                        {{volunteer.email}}
+                                    </div>
+
+                                    <!-- Active -->
+                                    <div class="hidden lg:block">
+                                        <ng-container *ngIf="volunteer.active">
+                                            <mat-icon class="text-green-400 icon-size-5"
+                                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                                        </ng-container>
+                                        <ng-container *ngIf="!volunteer.active">
+                                            <mat-icon class="text-gray-400 icon-size-5"
+                                                [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                                        </ng-container>
+                                    </div>
+
+                                    <!-- Details button -->
+                                    <div>
+                                        <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
+                                            (click)="toggleDetails(volunteer.id)">
+                                            <mat-icon class="icon-size-5"
+                                                [svgIcon]="selectedVolunteer?.id === volunteer.id ? 'heroicons_solid:chevron-up' : 'heroicons_solid:chevron-down'"></mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <ng-container *ngIf="selectedVolunteer?.id === volunteer.id">
+                                        <ng-container
+                                            *ngTemplateOutlet="rowDetailsTemplate; context: {$implicit: selectedVolunteer}"></ng-container>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+
+                    <mat-paginator
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.length"
+                        [pageIndex]="pagination.page" [pageSize]="pagination.size" [pageSizeOptions]="[5, 10, 25, 100]"
+                        [showFirstLastButtons]="true"></mat-paginator>
+
+                </ng-container>
+            </ng-container>
+
+            <ng-template #rowDetailsTemplate let-volunteer>
+                <div class="shadow-lg overflow-hidden">
+                    <div class="flex border-b">
+                        <!-- Selected product form -->
+                        <form class="flex flex-col w-full" [formGroup]="selectedVolunteerForm">
+
+                            <div class="flex flex-col sm:flex-row p-8">
+
+                                <div class="flex flex-auto flex-wrap">
+                                    <!-- Name, SKU & etc. -->
+                                    <div class="flex flex-col w-full lg:w-3/4 sm:pl-8">
+
+                                        <!-- Name -->
+                                        <mat-form-field class="w-full">
+                                            <mat-label>Name</mat-label>
+                                            <input matInput [formControlName]="'name'">
+                                        </mat-form-field>
+
+                                        <!-- SKU and Barcode -->
+
+
+                                        <!-- Stock and Reserved -->
+                                        <div class="flex">
+                                            <mat-form-field class="fuse-mat-textarea flex-auto w-2/3 pr-2">
+                                                <textarea matInput [placeholder]="'Address'" [rows]="3"
+                                                    [formControlName]="'address'"></textarea>
+                                                <mat-icon class="icon-size-5" matPrefix
+                                                    [svgIcon]="'heroicons_solid:menu-alt-2'"></mat-icon>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="w-1/3 pl-2">
+                                                <mat-label>Phone</mat-label>
+                                                <input matInput [formControlName]="'contact'">
+                                            </mat-form-field>
+
+                                            <mat-form-field class="w-full">
+                                                <mat-label>Password</mat-label>
+                                                <input id="password" matInput type="password" [formControlName]="'password'" #passwordField>
+                                                <button mat-icon-button type="button"
+                                                    (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                                                    matSuffix>
+                                                    <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                                                        [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                                                    <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                                                        [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                                                </button>
+                                                <mat-error>
+                                                    Password is required
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="flex">
+                                            <mat-form-field class="w-1/3 pr-2">
+                                                <mat-label>Volunteering Days</mat-label>
+                                                <mat-select [formControlName]="'volunteeringDays'" multiple>
+                                                    <ng-container *ngFor="let day of weekDays">
+                                                        <mat-option [value]="day.id">
+                                                            {{day.day}}
+                                                        </mat-option>
+                                                    </ng-container>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <mat-form-field class="w-1/3 pr-2">
+                                                <mat-label>Volunteering Start Time</mat-label>
+                                                <mat-select [formControlName]="'volunteeringStartTime'">
+                                                    <ng-container *ngFor="let time of hours24">
+                                                        <mat-option [value]="time">
+                                                            {{time}}
+                                                        </mat-option>
+                                                    </ng-container>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <mat-form-field class="w-1/3 pr-2">
+                                                <mat-label>Volunteering End Time</mat-label>
+                                                <mat-select [formControlName]="'volunteeringEndTime'">
+                                                    <ng-container *ngFor="let time of hours24">
+                                                        <mat-option [value]="time">
+                                                            {{time}}
+                                                        </mat-option>
+                                                    </ng-container>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+                                    <div class="flex flex-col w-full lg:w-1/4 sm:pl-8">
+                                        <!-- <div class="flex"> -->
+                                        <mat-form-field class="w-2/3 ">
+                                            <mat-label>PinCode</mat-label>
+                                            <input matInput [formControlName]="'pincode'">
+                                        </mat-form-field>
+
+                                        <span class="font-semibold mb-2">Volunteer status</span>
+                                        <mat-slide-toggle [formControlName]="'active'" [color]="'primary'">
+                                            {{selectedVolunteerForm.get('active').value === true ? 'Active' : 'Disabled'}}
+                                        </mat-slide-toggle>
+                                        <!-- </div> -->
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="flex items-center justify-between w-full border-t px-8 py-4">
+                                <!-- <button class="-ml-4" mat-button [color]="'warn'" (click)="deleteSelectedCanopy()">
+                                    Delete
+                                </button> -->
+                                <div class="flex items-center ">
+
+                                    <div class="flex items-center mr-4" *ngIf="flashMessage">
+                                        <ng-container *ngIf="flashMessage === 'success'">
+                                            <mat-icon class="text-green-500"
+                                                [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                                            <span class="ml-2">Volunteer updated</span>
+                                        </ng-container>
+                                        <ng-container *ngIf="flashMessage === 'error'">
+                                            <mat-icon class="text-red-500" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            <span class="ml-2">An error occurred, try again!</span>
+                                        </ng-container>
+                                    </div>
+                                    <button mat-flat-button [color]="'primary'" (click)="updateSelectedVolunteer()">
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #noVolunteer>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no
+                    Volunteers!</div>
+            </ng-template>
+
+        </div>
+
+    </div>
+
+</div>

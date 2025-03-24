@@ -1,0 +1,289 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div class="bg-card">
+        <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+            <div
+                class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-12"
+            >
+                <!-- Avatar and name -->
+                <div class="flex flex-auto items-center min-w-0">
+                    <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
+                        <img
+                            class="w-full h-full object-cover"
+                            src="assets/images/avatars/brian-hughes.jpg"
+                        />
+                    </div>
+                    <div class="flex flex-col min-w-0 ml-4">
+                        <ng-container *transloco="let t">
+                            <div
+                                class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate"
+                            >
+                                {{ t("welcome-back") }}, {{ user.name }}!
+                            </div>
+                        </ng-container>
+                        <div class="flex items-center">
+                            <mat-icon
+                                class="icon-size-5"
+                                [svgIcon]="'heroicons_solid:bell'"
+                            ></mat-icon>
+                            <div
+                                class="ml-1.5 leading-6 truncate text-secondary"
+                            >
+                                We have 15 new orders!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
+        <div class="w-full max-w-screen-xl mx-auto">
+            <!-- Tabs -->
+            <mat-tab-group class="sm:px-2" [animationDuration]="'0'">
+                <!-- Home -->
+                <mat-tab label="Home">
+                    <ng-template matTabContent>
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0"
+                        >
+                            <!-- Summary -->
+                            <div
+                                class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden"
+                            >
+                                <div class="flex items-center justify-center">
+                                    <div
+                                        class="text-lg font-medium tracking-tight leading-6 truncate"
+                                    >
+                                        Total Canopies
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500"
+                                    >
+                                        21
+                                    </div>
+                                    <div
+                                        class="text-lg font-medium text-blue-600 dark:text-blue-500"
+                                    >
+                                        Canopies
+                                    </div>
+                                    <div
+                                        class="flex items-baseline justify-center w-full mt-5 text-secondary"
+                                    >
+                                        <div
+                                            class="text-md font-medium truncate"
+                                        >
+                                            Deactivated:
+                                        </div>
+                                        <div
+                                            class="ml-1.5 text-lg font-semibold"
+                                        >
+                                            3
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Total Volunteers -->
+                            <div
+                                class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden"
+                            >
+                                <div class="flex items-center justify-center">
+                                    <div
+                                        class="text-lg font-medium tracking-tight leading-6 truncate"
+                                    >
+                                        Total Volunteers
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-green-500"
+                                    >
+                                        101
+                                    </div>
+                                    <div
+                                        class="text-lg font-medium text-green-600 dark:text-green-500"
+                                    >
+                                        Volunteers
+                                    </div>
+                                    <div
+                                        class="flex items-baseline justify-center w-full mt-5 text-secondary"
+                                    >
+                                        <div
+                                            class="text-md font-medium truncate"
+                                        >
+                                            Deactivated:
+                                        </div>
+                                        <div
+                                            class="ml-1.5 text-lg font-semibold"
+                                        >
+                                            3
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden"
+                            >
+                                <div class="flex items-center justify-center">
+                                    <div
+                                        class="text-lg font-medium tracking-tight leading-6 truncate"
+                                    >
+                                        Total Donors
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-yellow-500"
+                                    >
+                                        1080
+                                    </div>
+                                    <div
+                                        class="text-lg font-medium text-yellow-600 dark:text-yellow-500"
+                                    >
+                                        Donors
+                                    </div>
+                                    <div
+                                        class="flex items-baseline justify-center w-full mt-5 text-secondary"
+                                    >
+                                        <div
+                                            class="text-md font-medium truncate"
+                                        >
+                                            Deactivated:
+                                        </div>
+                                        <div
+                                            class="ml-1.5 text-lg font-semibold"
+                                        >
+                                            21
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Features -->
+                            <div
+                                class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden"
+                            >
+                                <div class="flex items-center justify-center">
+                                    <div
+                                        class="text-lg font-medium tracking-tight leading-6 truncate"
+                                    >
+                                        Total Donations
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-green-500"
+                                    >
+                                        3101
+                                    </div>
+                                    <div
+                                        class="text-lg font-medium text-green-600 dark:text-green-500"
+                                    >
+                                        Donations
+                                    </div>
+                                    <div
+                                        class="flex items-baseline justify-center w-full mt-5 text-secondary"
+                                    >
+                                        <div
+                                            class="text-md font-medium truncate"
+                                        >
+                                            Cancelled:
+                                        </div>
+                                        <div
+                                            class="ml-1.5 text-lg font-semibold"
+                                        >
+                                            18
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Analytics Overview -->
+                            <div
+                                class="sm:col-span-2 lg:col-span-3 dark flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden"
+                            >
+                                <div
+                                    class="flex items-center justify-between mt-10 ml-10 mr-6 sm:mr-10"
+                                >
+                                    <div class="flex flex-col">
+                                        <div
+                                            class="mr-4 text-2xl md:text-3xl font-semibold tracking-tight leading-7"
+                                        >
+                                            Food Donation Overview
+                                        </div>
+                                        <div class="font-medium text-secondary">
+                                            Number of donations
+                                        </div>
+                                    </div>
+                                    <div class="ml-2">
+                                        <mat-button-toggle-group
+                                            class="hidden sm:inline-flex border-none space-x-1"
+                                            value="this-year"
+                                            #visitorsYearSelector="matButtonToggleGroup"
+                                        >
+                                            <mat-button-toggle
+                                                class="px-1.5 rounded-full overflow-hidden border-none font-medium"
+                                                value="last-year"
+                                                >Last Year
+                                            </mat-button-toggle>
+                                            <mat-button-toggle
+                                                class="px-1.5 rounded-full overflow-hidden border-none font-medium"
+                                                value="this-year"
+                                                >This Year
+                                            </mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                        <div class="sm:hidden">
+                                            <button
+                                                mat-icon-button
+                                                [matMenuTriggerFor]="
+                                                    visitorsMenu
+                                                "
+                                            >
+                                                <mat-icon
+                                                    [svgIcon]="
+                                                        'heroicons_outline:dots-vertical'
+                                                    "
+                                                ></mat-icon>
+                                            </button>
+                                            <mat-menu #visitorsMenu="matMenu">
+                                                <button mat-menu-item>
+                                                    This Year
+                                                </button>
+                                                <button mat-menu-item>
+                                                    Last Year
+                                                </button>
+                                            </mat-menu>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col flex-auto h-80">
+                                    <apx-chart
+                                        class="flex-auto w-full h-full"
+                                        [chart]="chartVisitors.chart"
+                                        [colors]="chartVisitors.colors"
+                                        [dataLabels]="chartVisitors.dataLabels"
+                                        [fill]="chartVisitors.fill"
+                                        [grid]="chartVisitors.grid"
+                                        [series]="
+                                            chartVisitors.series[
+                                                visitorsYearSelector.value
+                                            ]
+                                        "
+                                        [stroke]="chartVisitors.stroke"
+                                        [tooltip]="chartVisitors.tooltip"
+                                        [xaxis]="chartVisitors.xaxis"
+                                        [yaxis]="chartVisitors.yaxis"
+                                    ></apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>
